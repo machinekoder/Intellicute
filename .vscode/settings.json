@@ -1,0 +1,15 @@
+{
+    "cmake.configureSettings": {
+        //"CMAKE_MODULE_PATH":"/opt/toolchain/cmake",
+        //"CMAKE_TOOLCHAIN_FILE":"/opt/toolchain/cmake/Toolchains/x86_64-Linux.cmake",
+        "CMAKE_PREFIX_PATH":"/home/alexander/bin/Qt/6.4.2/gcc_64/lib/cmake/",
+        },
+    // set LD_LIBRARY_PATH to find the ssl library
+    "env": {
+        "LD_LIBRARY_PATH": "/home/alexander/bin/Qt/Tools/QtDesignStudio/lib/Qt/lib/"
+    },
+    "files.associations": {
+        "optional": "cpp",
+        "system_error": "cpp"
+    }
+}

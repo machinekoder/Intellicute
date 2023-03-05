@@ -1,0 +1,2 @@
+module core
+singleton Style 1.0 Style.qml

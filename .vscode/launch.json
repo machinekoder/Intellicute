@@ -1,0 +1,39 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/intellicute",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/home/alexander/bin/Qt/6.4.2/gcc_64/lib"
+                },
+                //{
+               //     "name": "QT_PLUGIN_PATH",
+               //     "value": "/home/alexander/bin/Qt/6.4.2/gcc_64/plugins/"
+              //  }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "CMake: build",
+            "visualizerFile": "/home/alexander/.config/Code/User/workspaceStorage/575cf777fb3082e60e76d12fc47be455/tonka3000.qtvsctools/qt.natvis.xml"
+        }
+    ],
+}

@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qtquickcontrols2.conf</file>
+        <file>fonts/fa-solid-900.ttf</file>
+        <file>icons/intellicute_32.png</file>
+        <file>icons/intellicute_64.png</file>
+        <file>icons/intellicute_128.png</file>
+        <file>icons/intellicute_256.png</file>
+        <file>icons/intellicute_512.png</file>
+        <file>icons/intellicute_512.svg</file>
+    </qresource>
+</RCC>

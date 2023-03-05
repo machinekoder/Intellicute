@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>core/qmldir</file>
+        <file>core/Style.qml</file>
+        <file>TopLevel.qml</file>
+        <file>SettingsPage.qml</file>
+        <file>RecordButton.qml</file>
+        <file>ChatView.qml</file>
+        <file>ChatPage.qml</file>
+        <file>main.qml</file>
+        <file>live.qml</file>
+    </qresource>
+</RCC>
