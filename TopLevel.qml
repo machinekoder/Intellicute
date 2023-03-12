@@ -73,6 +73,5 @@ Item {
 
     Component.onCompleted: {
         stack.push(chatPage)
-        stack.push(settingsPage)
     }
 }
