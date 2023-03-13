@@ -25,6 +25,8 @@ if (ANDROID)
     set_property(TARGET intellicute PROPERTY QT_ANDROID_EXTRA_LIBS
         ${ANDROID_SSL_PATH}/libcrypto_1_1.so
         ${ANDROID_SSL_PATH}/libssl_1_1.so)
+    set_property(TARGET intellicute PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+        ${PROJECT_SOURCE_DIR}/android)
 endif()
 
 qt_add_qml_module(intellicute
