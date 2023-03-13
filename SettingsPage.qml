@@ -103,9 +103,11 @@ Page {
             ScrollBar.vertical.policy: scrollBarRequired ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
 
             ColumnLayout {
+                id: settingsContent
                 width: scrollView.availableWidth
                        - (scrollView.scrollBarRequired ? scrollView.ScrollBar.vertical.width
                                                          + Style.singleMargin : 0)
+                height: implicitHeight > scrollView.availableHeight ? implicitHeight : scrollView.availableHeight
 
                 ColumnLayout {
                     Layout.fillWidth: true
@@ -113,6 +115,7 @@ Page {
 
                     GroupBox {
                         Layout.fillWidth: true
+                        Layout.fillHeight: true
                         Layout.preferredHeight: 300
                         title: qsTr("Default Messages")
                         clip: true
