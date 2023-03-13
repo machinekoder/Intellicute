@@ -44,7 +44,7 @@ ListView {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 text: item?.message?.content ?? ""
-                textFormat: markdownCheckbox.checked ? TextEdit.MarkdownText : TextEdit.PlainText
+                textFormat: markdownRadio.checked ? TextEdit.MarkdownText : (htmlRadio.checked ? TextEdit.RichText : TextEdit.PlainText)
                 wrapMode: TextEdit.WordWrap
                 verticalAlignment: TextEdit.AlignVCenter
                 onEditingFinished: {
@@ -116,10 +116,24 @@ ListView {
 
             MenuSeparator {}
 
-            CheckBox {
-                id: markdownCheckbox
+            RadioButton {
+                id: markdownRadio
                 text: qsTr("Render Markdown")
                 checked: true
+                onClicked: contextMenu.close()
+            }
+
+            RadioButton {
+                id: htmlRadio
+                text: qsTr("Render HTML")
+                checked: false
+                onClicked: contextMenu.close()
+            }
+
+            RadioButton {
+                id: plainRadio
+                text: qsTr("Render Plain Text")
+                checked: false
                 onClicked: contextMenu.close()
             }
         }
