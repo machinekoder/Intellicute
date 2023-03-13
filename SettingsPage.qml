@@ -9,9 +9,9 @@ Page {
 
     required property var settings
 
-    signal cancel()
-    signal accept()
-    signal reset()
+    signal cancel
+    signal accept
+    signal reset
 
     function applySettings() {
         root.settings.tts.autoplay = autoplayCheckbox.checked
@@ -57,7 +57,7 @@ Page {
                 radius: width / 2.0
                 color: control.pressed ? "#f0f0f0" : "#f6f6f6"
                 border.color: "#bdbebf"
-                
+
                 Label {
                     anchors.centerIn: parent
                     text: control.value.toFixed(1)
@@ -83,7 +83,7 @@ Page {
 
         ToolButton {
             id: button
-            text: control.echoMode == TextInput.Normal ? "\uf06e" : "\uf070"
+            text: control.echoMode == TextInput.Normal ? "\uf070" : "\uf06e"
             font.family: "FontAwesome"
             checkable: true
         }
@@ -91,177 +91,196 @@ Page {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: Style.doubleMargin
+        anchors.margins: Style.singleMargin
 
-        ColumnLayout {
+        ScrollView {
+            id: scrollView
+            readonly property bool scrollBarRequired: scrollView.contentHeight
+                                                      > scrollView.availableHeight
+            contentWidth: availableWidth
             Layout.fillWidth: true
             Layout.fillHeight: true
+            ScrollBar.vertical.policy: scrollBarRequired ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
 
-            GroupBox {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 300
-                title: qsTr("Default Messages")
-                clip: true
+            ColumnLayout {
+                width: scrollView.availableWidth
+                       - (scrollView.scrollBarRequired ? scrollView.ScrollBar.vertical.width
+                                                         + Style.singleMargin : 0)
 
-                ChatView {
-                    anchors.fill: parent
-                    anchors.margins: Style.singleMargin
-                    model: OpenAIMessageModel {
-                        id: messageModel
-                        jsonString: JSON.stringify(root.settings.chat.defaultMessages)
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    GroupBox {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 300
+                        title: qsTr("Default Messages")
+                        clip: true
+
+                        ChatView {
+                            anchors.fill: parent
+                            anchors.margins: Style.singleMargin
+                            model: OpenAIMessageModel {
+                                id: messageModel
+                                jsonString: JSON.stringify(
+                                                root.settings.chat.defaultMessages)
+                            }
+                        }
+                    }
+
+                    GroupBox {
+                        Layout.fillWidth: true
+                        title: qsTr("Chat Settings")
+
+                        GridLayout {
+                            anchors.fill: parent
+                            columns: 2
+
+                            Label {
+                                text: qsTr("Temperature")
+                            }
+
+                            ValueSlider {
+                                id: temperatureSlider
+                                Layout.fillWidth: true
+                                slider.value: root.settings.chat.temperature
+                            }
+
+                            Label {
+                                text: qsTr("Top P")
+                            }
+
+                            ValueSlider {
+                                id: topPSlider
+                                Layout.fillWidth: true
+                                slider.value: root.settings.chat.topP
+                            }
+
+                            Label {
+                                text: qsTr("Frequency Penalty")
+                            }
+
+                            ValueSlider {
+                                id: frequencyPenaltySlider
+                                Layout.fillWidth: true
+                                slider.value: root.settings.chat.frequencyPenalty
+                            }
+
+                            Label {
+                                text: qsTr("Presence Penalty")
+                            }
+
+                            ValueSlider {
+                                id: presencePenaltySlider
+                                Layout.fillWidth: true
+                                slider.value: root.settings.chat.presencePenalty
+                            }
+
+                            Label {
+                                text: qsTr("Max Tokens")
+                            }
+
+                            SpinBox {
+                                id: maxTokensSpinBox
+                                value: root.settings.chat.maxTokens
+                                from: 1
+                                to: 2048
+                                editable: true
+                            }
+
+                            Label {
+                                text: qsTr("OpenAI API Access Token")
+                            }
+
+                            HidableTextField {
+                                id: openAiAccessTokenTextField
+                                Layout.fillWidth: true
+                                text: root.settings.openai.accessToken
+                            }
+                        }
+                    }
+
+                    GroupBox {
+                        Layout.fillWidth: true
+                        title: qsTr("TTS Settings")
+
+                        GridLayout {
+                            anchors.fill: parent
+                            columns: 2
+
+                            CheckBox {
+                                id: autoplayCheckbox
+                                Layout.columnSpan: 2
+                                text: qsTr("Auto Speak")
+                                checked: root.settings.tts.autoplay
+                            }
+
+                            Label {
+                                text: qsTr("TTS Locale")
+                            }
+
+                            ComboBox {
+                                id: localeComboBox
+                                model: ["de", "en", "es", "fr", "it", "ja", "ko", "pt", "zh"]
+                                currentIndex: model.indexOf(
+                                                  root.settings.tts.locale)
+                            }
+
+                            GroupBox {
+                                label: CheckBox {
+                                    id: useWatsonCheckbox
+                                    text: qsTr("Use Watson TTS")
+                                    checked: root.settings.tts.watson.use
+                                }
+                                Layout.columnSpan: 2
+                                Layout.fillWidth: true
+
+                                GridLayout {
+                                    anchors.fill: parent
+                                    enabled: useWatsonCheckbox.checked
+                                    columns: 2
+
+                                    Label {
+                                        text: qsTr("Voice")
+                                    }
+
+                                    ComboBox {
+                                        id: voiceComboBox
+                                        Layout.fillWidth: true
+                                        model: d.watsonVoices
+                                        currentIndex: d.watsonVoices.indexOf(
+                                                          root.settings.tts.watson.voice)
+                                    }
+
+                                    Label {
+                                        text: qsTr("IBM Watson API Key")
+                                    }
+
+                                    HidableTextField {
+                                        id: watsonApiKeyTextField
+                                        Layout.fillWidth: true
+                                        text: root.settings.tts.watson.apiKey
+                                    }
+
+                                    Label {
+                                        text: qsTr("IBM Watson API URL")
+                                    }
+
+                                    HidableTextField {
+                                        id: watsonApiUrlTextField
+                                        Layout.fillWidth: true
+                                        text: root.settings.tts.watson.apiUrl
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
-            }
 
-            GroupBox {
-                Layout.fillWidth: true
-                title: qsTr("Chat Settings")
-
-                GridLayout {
-                    anchors.fill: parent
-                    columns: 2
-
-                    Label {
-                        text: qsTr("Temperature")
-                    }
-
-                    ValueSlider {
-                        id: temperatureSlider
-                        Layout.fillWidth: true
-                        slider.value: root.settings.chat.temperature
-                    }
-                    
-                    Label {
-                        text: qsTr("Top P")
-                    }
-
-                    ValueSlider {
-                        id: topPSlider
-                        Layout.fillWidth: true
-                        slider.value: root.settings.chat.topP
-                    }
-
-                    Label {
-                        text: qsTr("Frequency Penalty")
-                    }
-
-                    ValueSlider {
-                        id: frequencyPenaltySlider
-                        Layout.fillWidth: true
-                        slider.value: root.settings.chat.frequencyPenalty
-                    }
-
-                    Label {
-                        text: qsTr("Presence Penalty")
-                    }
-
-                    ValueSlider {
-                        id: presencePenaltySlider
-                        Layout.fillWidth: true
-                        slider.value: root.settings.chat.presencePenalty
-                    }
-
-                    Label {
-                        text: qsTr("Max Tokens")
-                    }
-
-                    SpinBox {
-                        id: maxTokensSpinBox
-                        value: root.settings.chat.maxTokens
-                        from: 1
-                        to: 2048
-                        editable: true
-                    }
-
-                    Label {
-                        text: qsTr("OpenAI API Access Token")
-                    }
-
-                    HidableTextField {
-                        id: openAiAccessTokenTextField
-                        Layout.fillWidth: true
-                        text: root.settings.openai.accessToken
-                    }
+                Item {
+                    Layout.fillHeight: true
                 }
             }
-
-            GroupBox {
-                Layout.fillWidth: true
-                title: qsTr("TTS Settings")
-
-                GridLayout {
-                    anchors.fill: parent
-                    columns: 2
-
-                CheckBox {
-                    id: autoplayCheckbox
-                    Layout.columnSpan: 2
-                    text: qsTr("Auto Speak")
-                    checked: root.settings.tts.autoplay
-                }
-
-            Label {
-                text: qsTr("TTS Locale")
-            }
-
-            ComboBox {
-                id: localeComboBox
-                model: ["de", "en", "es", "fr", "it", "ja", "ko", "pt", "zh"]
-                currentIndex: model.indexOf(root.settings.tts.locale)
-            }
-
-            GroupBox {
-                label: CheckBox {
-                    id: useWatsonCheckbox
-                    text : qsTr("Use Watson TTS")
-                    checked: root.settings.tts.watson.use
-                }
-                Layout.columnSpan: 2
-                Layout.fillWidth: true
-
-                GridLayout {
-                    anchors.fill: parent
-                    enabled: useWatsonCheckbox.checked
-                    columns: 2
-
-                    Label {
-                        text: qsTr("Voice")
-                    }
-
-                    ComboBox {
-                        id: voiceComboBox
-                        Layout.fillWidth: true
-                        model: d.watsonVoices
-                        currentIndex: d.watsonVoices.indexOf(root.settings.tts.watson.voice)
-                    }
-                    
-                    Label {
-                        text: qsTr("IBM Watson API Key")
-                    }
-
-                    HidableTextField {
-                        id: watsonApiKeyTextField
-                        Layout.fillWidth: true
-                        text: root.settings.tts.watson.apiKey
-                    }
-
-                    Label {
-                        text: qsTr("IBM Watson API URL")
-                    }
-
-                    HidableTextField {
-                        id: watsonApiUrlTextField
-                        Layout.fillWidth: true
-                        text: root.settings.tts.watson.apiUrl
-                    }
-                }
-            }
-                }
-            }
-        }
-
-        Item {
-            Layout.fillHeight: true
         }
 
         RowLayout {
